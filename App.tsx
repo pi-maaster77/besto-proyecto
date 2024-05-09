@@ -1,20 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import Articles from './components/Articles/Articles';
+import React from 'react';
+import styles from './Style';
+import { Image, Text, View, Button} from 'react-native';
 
-export default function App() {
+function App() {
+  const article1 = {
+    title: 'Título del artículo',
+    image: require('./assets/favicon.png')
+  };
+  const article2 = {
+    title: 'Título del artículo',
+    image: require('./assets/icon.png')
+  };
+  const article3 = {
+    title: 'Título del artículo',
+    image: require('./assets/splash.png')
+  };
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View style={styles.app}>
+      <Articles articles={[article1, article3, article2, ]} />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
