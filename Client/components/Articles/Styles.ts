@@ -27,9 +27,8 @@ const styles = StyleSheet.create({
     },
     image: {
         flex: 1,
-        resizeMode: 'contain', // Ajusta la imagen para que quepa dentro del contenedor sin recortarse
-        width: '100%',
-        height: null,
+        width:500,
+        height:500,
     }
 });
 

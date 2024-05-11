@@ -1,14 +1,8 @@
 import React from "react";
-import { ScrollView, View, Text, Image } from "react-native";
-import style from "./Style";
-interface ArticleProps {
-    title: string;
-    image: any;
-}
-
-interface ArticlesProps {
-    articles: ArticleProps[];
-}
+import { ScrollView, View, Text, Image, FlatList } from "react-native";
+import style from "./Styles";
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 /* 
 
@@ -18,29 +12,59 @@ Se tienen que usar los componentes de react-native, no los por defecto de jsx
 Los estilos son objetos. Similar a css pero con sintaxis de javascript
 */
 
-const Articles: React.FC<ArticlesProps> = ({ articles }) => {
+interface DataItem {
+    id: number;
+    image: string;
+    title: string;
+  }
+  
+
+function Articles() {
     /**
     * @param {ArticlesProps} articles es un array de articulos en formato @param ArticleProps
     */
+    const [data, setData] = useState<DataItem[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get<DataItem[]>('http://localhost:5000');
+          setData(response.data);
+          setIsLoading(false);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          setIsLoading(false);
+        }
+      };
+  
+      fetchData();
+    }, []);
+  
+    console.log(data)
     return (
-
-
-        <ScrollView> {/* ScrollView es como un div,*/}
-            {articles.map((article, index) => (
-                <View style={style.container} key={index}>
-                    <View style={style.textContainer}>
-                        <Text style={style.title}>
-                            {article.title}
-                        </Text>
-                    </View>
-                    <Image 
-                        source={article.image} 
-                        style={style.image} 
-                    />
+        <ScrollView>
+        {isLoading ? (
+          <Text>Loading...</Text>
+        ) : (
+          data.map((article, index) => (
+            <View style={style.container} key={index}>
+                <View style={style.textContainer}>
+                    <Text style={style.title}>{article.title}</Text>
                 </View>
-            ))}
-        </ScrollView>
+            <Image
+                style={style.image}
+                source={{
+                uri: 'http://localHost:5000/data',
+                }}
+                resizeMode="contain"
+            />
+            </View>
+          ))
+        )}
+      </ScrollView>
     );
+    
 };
 
 export default Articles;

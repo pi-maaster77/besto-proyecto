@@ -1,9 +1,9 @@
-// Style.tsx
+// Styles.tsx
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     app: {
-        backgroundColor: '#000',
+        backgroundColor: '#001',
         width: '100%'
     }
 });
