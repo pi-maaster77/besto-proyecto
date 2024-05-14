@@ -27,8 +27,8 @@ const styles = StyleSheet.create({
     },
     image: {
         flex: 1,
-        width:500,
-        height:500,
+        aspectRatio: 1, // Para mantener la relación de aspecto original
+        width: '100%', // Para que la imagen ocupe todo el ancho del contenedor
     }
 });
 

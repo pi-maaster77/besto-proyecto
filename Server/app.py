@@ -1,7 +1,7 @@
 import os
 import psycopg2
 from dotenv import load_dotenv
-from flask import Flask, jsonify, send_file
+from flask import Flask, jsonify, send_file, request
 from flask_cors import CORS
 
 load_dotenv()
@@ -30,6 +30,14 @@ def route():
         json_result = result[0][0]
         return jsonify(json_result)
 
-@app.route("/data")
+@app.route("/image")
 def data():
-    return send_file("./icon.png", mimetype='image/jpg')
+    nombre = request.args.get('nombre')
+    try: 
+        return send_file(f"images/{nombre}", mimetype='image/png')
+    except Exception as e:
+        print(e)
+        return send_file(f"images/404.png", mimetype='image/*')
+@app.route("/testeo")
+def testeo():
+    return "when ases tus momos en tu codigo :V"
