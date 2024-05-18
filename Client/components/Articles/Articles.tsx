@@ -3,6 +3,7 @@ import { ScrollView, View, Text, Image, FlatList } from "react-native";
 import style from "./Styles";
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import {Article, DataItem} from "../Article/Article";
 
 /* 
 
@@ -12,13 +13,7 @@ Se tienen que usar los componentes de react-native, no los por defecto de jsx
 Los estilos son objetos. Similar a css pero con sintaxis de javascript
 */
 
-interface DataItem {
-  id: number;
-  image: string;
-  title: string;
-}
   
-
 function Articles() {
   /**
   * @param {ArticlesProps} articles es un array de articulos en formato @param ArticleProps
@@ -37,29 +32,22 @@ function Articles() {
         setIsLoading(false);
       }
     };
-
     fetchData();
+    const intervalo = setInterval(() => {
+      fetchData();
+  }, 100000);
+  return () => clearInterval(intervalo);
   }, []);
 
+  
   console.log(data)
   return (
     <ScrollView>
       {isLoading ? (
         <Text>Loading...</Text>
       ) : (
-        data.map((article, index) => (
-        <View style={style.container} key={index}>
-          <View style={style.textContainer}>
-            <Text style={style.title}>{article.title}</Text>
-          </View>
-          <Image
-            style={style.image}
-            source={{
-              uri: `http://localHost:5000/image?nombre=${article.image}`,
-            }}
-            resizeMode="contain"
-          />
-        </View>
+        data.map((article) => (
+          <Article {...article} key={article.id}/>
       ))
     )}
     </ScrollView>

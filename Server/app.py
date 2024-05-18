@@ -38,6 +38,20 @@ def data():
     except Exception as e:
         print(e)
         return send_file(f"images/404.png", mimetype='image/*')
+
+@app.route("/likes")
+def get_likes():
+    with connection.cursor() as cursor:
+        reqId = request.args.get('id')
+        cursor.execute(f"""
+            SELECT likes FROM articulos WHERE id = {reqId}
+        """
+        )
+        result = cursor.fetchall()
+        # Accede al primer elemento de la lista (el JSON agregado)
+        json_result = result[0][0]
+        return jsonify(json_result)
+    
 @app.route("/testeo")
 def testeo():
     return "when ases tus momos en tu codigo :V"
