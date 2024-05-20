@@ -1,14 +1,22 @@
 import Articles from './components/Articles/Articles';
 
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Styles';
-import { View, Text, Image } from 'react-native';
+import { View, Button, Text, TouchableOpacity} from 'react-native';
+import Uploader from './components/Uploader/Uploader';
 
 
 function App() {
+  const [upload, setUpload] = useState(false)
+  const handlePress = () => {
+    setUpload(!upload);
+  };
   return (
     <View style={styles.app}>
-      <Articles/>
+      {upload?  <Uploader/>:<Articles/>}
+      <TouchableOpacity style={styles.button}>
+        <Button onPress={handlePress} title='apretar'/>
+      </TouchableOpacity>
     </View>
   );
 }

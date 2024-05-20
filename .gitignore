@@ -34,7 +34,7 @@ Client/.env*.local
 # typescript
 Client/*.tsbuildinfo
 Client/package-lock.json
-
+Client/components/Tester
 # python
 Server/.venv/
 Server/__pycache__/

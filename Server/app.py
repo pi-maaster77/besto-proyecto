@@ -10,8 +10,7 @@ app = Flask(__name__)
 CORS(app)
 url = os.getenv("DATABASE_URL")
 connection = psycopg2.connect(url)
-print("conexion exitosa")
-
+print("Conexion exitosa")
 
 @app.route("/")
 def route():
@@ -23,10 +22,8 @@ def route():
                 'title', title
                 )) AS articulos 
             FROM articulos;
-        """
-        )
+        """)
         result = cursor.fetchall()
-        # Accede al primer elemento de la lista (el JSON agregado)
         json_result = result[0][0]
         return jsonify(json_result)
 
@@ -43,15 +40,18 @@ def data():
 def get_likes():
     with connection.cursor() as cursor:
         reqId = request.args.get('id')
-        cursor.execute(f"""
-            SELECT likes FROM articulos WHERE id = {reqId}
-        """
-        )
+        cursor.execute(f"SELECT likes FROM articulos WHERE id = {reqId}")
         result = cursor.fetchall()
-        # Accede al primer elemento de la lista (el JSON agregado)
         json_result = result[0][0]
         return jsonify(json_result)
-    
-@app.route("/testeo")
-def testeo():
-    return "when ases tus momos en tu codigo :V"
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    title = request.form.get('title')
+    if not title:
+        return jsonify({'error': 'No title provided'}), 400
+    else:
+        return jsonify({
+            'message': 'solicitud aceptada',
+            'title': title
+        })
