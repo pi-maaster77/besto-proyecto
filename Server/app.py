@@ -55,6 +55,7 @@ def upload_file():
             'message': 'solicitud aceptada',
             'title': title
         })
+    
 @app.route('/login', methods=['POST'])
 def login():
     user = request.form.get('user')
@@ -63,10 +64,24 @@ def login():
     print(f"passwd: {passwd}")
 
     with connection.cursor() as cursor:
-        query = "SELECT * FROM users WHERE username = %s AND password = %s"
+        query = "SELECT * FROM users "
         cursor.execute(query, (user, passwd))
         result = cursor.fetchone()
         json_result = result
         return jsonify(json_result)
 
-    return(jsonify({'message': 'ok'}))
+@app.route('/register', methods=['POST'])
+def register():
+    user = request.form.get('user')
+    passwd = request.form.get('passwd')
+    print(f"user: {user}")
+    print(f"passwd: {passwd}")
+    try: 
+        with connection.cursor() as cursor:
+            query = f"""INSERT INTO users (username, password)
+            VALUES ({user}, {passwd})
+            """
+            cursor.execute(query, (user, passwd))
+            return jsonify({"message": "ok"})
+    except Exception as e: 
+        return jsonify({"error": e})
