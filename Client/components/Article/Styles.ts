@@ -3,8 +3,9 @@ import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
-        width:300,
-        maxHeight:600,
+        width:'50%',
+        maxHeight:'80%',
+        justifyContent: 'center',
         backgroundColor: '#303030',
         borderRadius: 20,
         padding: 20,

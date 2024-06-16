@@ -22,21 +22,18 @@ function App() {
   // Renderizamos la interfaz de usuario
   return (
     <View style={styles.app}>
-      {/*
-      // Condicionalmente renderizamos Uploader o Articles basado en el estado upload
-      {upload ? <Uploader /> : <Articles />}
+      {/** Condicionalmente renderizamos Uploader o Articles basado  en el estado upload */}
+      {/** upload ? <Uploader /> : <Articles /> */}
+      <Articles /> 
       
-      // Botón dentro de un TouchableOpacity para cambiar entre Uploader y Articles
-      <TouchableOpacity style={styles.button}>
-        <Button onPress={handlePress} title='Apretar'/>
-      </TouchableOpacity>
-      */}
-      
-      {/* Renderizamos el componente Inicio_sesion */}
-      <Inicio_sesion />
-      
-      {/* Renderizamos el componente Registro */}
-      <Registro />
+
+      {
+      // {/* Renderizamos el componente Inicio_sesion */}
+      // <Inicio_sesion />
+      // 
+      // {/* Renderizamos el componente Registro */}
+      // <Registro />
+      }
     </View>
   );
 }

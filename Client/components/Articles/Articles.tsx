@@ -55,7 +55,7 @@ function Articles() {
 
   // Renderizamos la interfaz de usuario
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={style.article}>
       {/* Mostramos un mensaje de carga mientras los datos están siendo obtenidos */}
       {isLoading ? (
         <Text>Loading...</Text>

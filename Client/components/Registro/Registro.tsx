@@ -59,6 +59,7 @@ function Registro() {
             {/* Campo de entrada para el nombre de usuario */}
             <TextInput 
                 placeholder="Nombre de Usuario" 
+                placeholderTextColor={styles.textPlaceHolder.color}
                 style={styles.textInput}
                 value={user} // El valor del campo es el estado user
                 onChangeText={text => setUser(text)} // Actualizamos el estado user cuando el texto cambia
@@ -66,7 +67,8 @@ function Registro() {
             
             {/* Campo de entrada para la contraseña */}
             <TextInput 
-                placeholder="Contraseña" 
+                placeholder="Contraseña"
+                placeholderTextColor={styles.textPlaceHolder.color} 
                 style={styles.textInput}
                 value={passwd} // El valor del campo es el estado passwd
                 onChangeText={text => setPasswd(text)} // Actualizamos el estado passwd cuando el texto cambia
@@ -76,6 +78,7 @@ function Registro() {
             {/* Campo de entrada para confirmar la contraseña */}
             <TextInput 
                 placeholder="Confirmar Contraseña" 
+                placeholderTextColor={styles.textPlaceHolder.color}
                 style={styles.textInput}
                 value={cpasswd} // El valor del campo es el estado cpasswd
                 onChangeText={text => setCPasswd(text)} // Actualizamos el estado cpasswd cuando el texto cambia

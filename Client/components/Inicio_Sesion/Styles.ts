@@ -10,6 +10,9 @@ const styles = StyleSheet.create({
         color: '#FFF',
         fontSize: 30
     },
+    textPlaceHolder:{
+        color: '#777',
+    },
     textError: {
         color: '#FFF',
         backgroundColor: '#A55',

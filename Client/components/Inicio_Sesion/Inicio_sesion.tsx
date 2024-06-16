@@ -16,6 +16,7 @@ function Inicio_sesion() {
         // Validamos que todos los campos estén llenos
         if (!user || !passwd) {
             setError("No se ingresó el usuario o la contraseña"); // Establecemos un mensaje de error si falta algún campo
+            setPasswd("");
             return; // Terminamos la ejecución de la función si hay error
         }
 
@@ -39,6 +40,7 @@ function Inicio_sesion() {
         .catch(error => {
             // Imprimimos cualquier error que ocurra durante la solicitud
             console.error('Error uploading form:', error.response?.data || error.message);
+            setPasswd("");
             setError(error.message); // Establecemos un mensaje de error con el mensaje del error capturado
         });
     }
@@ -51,7 +53,8 @@ function Inicio_sesion() {
             
             {/* Campo de entrada para el nombre de usuario */}
             <TextInput 
-                placeholder="Nombre de usuario" 
+                placeholder="Nombre de usuario"
+                placeholderTextColor={styles.textPlaceHolder.color} 
                 style={styles.textInput}
                 value={user} // El valor del campo es el estado user
                 onChangeText={text => setUser(text)} // Actualizamos el estado user cuando el texto cambia
@@ -60,6 +63,7 @@ function Inicio_sesion() {
             {/* Campo de entrada para la contraseña */}
             <TextInput 
                 placeholder="Contraseña" 
+                placeholderTextColor={styles.textPlaceHolder.color}
                 style={styles.textInput}
                 value={passwd} // El valor del campo es el estado passwd
                 onChangeText={text => setPasswd(text)} // Actualizamos el estado passwd cuando el texto cambia
