@@ -1,40 +1,35 @@
 // Importamos los componentes necesarios
 import Articles from './components/Articles/Articles';
 import React, { useState } from 'react';
-import styles from './Styles'; // Importamos los estilos desde un archivo separado
-import { View, Button, Text, TouchableOpacity } from 'react-native';
 import Uploader from './components/Uploader/Uploader';
 import Inicio_sesion from './components/Inicio_Sesion/Inicio_sesion';
 import Registro from './components/Registro/Registro';
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+const Stack = createNativeStackNavigator();
 // Definimos el componente principal de la aplicación
 function App() {
-  /*
-  // Estado para manejar si se muestra el componente Uploader o Articles
-  const [upload, setUpload] = useState(false);
-  
-  // Función para manejar el evento de presionar el botón
-  const handlePress = () => {
-    setUpload(!upload); // Alterna el estado de upload entre true y false
-  }; 
-  */
-
   // Renderizamos la interfaz de usuario
   return (
-    <View style={styles.app}>
-      {/** Condicionalmente renderizamos Uploader o Articles basado  en el estado upload */}
-      {/** upload ? <Uploader /> : <Articles /> */}
-      <Articles /> 
-      
-
-      {
-      // {/* Renderizamos el componente Inicio_sesion */}
-      // <Inicio_sesion />
-      // 
-      // {/* Renderizamos el componente Registro */}
-      // <Registro />
-      }
-    </View>
+    // se crea el contenedor para el navegador 
+    <NavigationContainer> 
+      {/** 
+       * 21: se establece que la ruta por defecto sea "Main" 
+       * 22: se quita una barra de arriba propia del componente
+      */}
+      <Stack.Navigator 
+        initialRouteName="Main"
+        screenOptions={{ headerShown: false }}
+      > 
+      {/** 
+       * 27 en adelante: establecemos rutas para el navegador, como la pagina principal, el regustro, el inicio de sesion y para subir articulos
+      */}
+        <Stack.Screen name="Main" component={Articles}/> 
+        <Stack.Screen name="Register" component={Registro}/>
+        <Stack.Screen name="Login" component={Inicio_sesion}/>
+        <Stack.Screen name="Upload" component={Uploader}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
