@@ -18,7 +18,7 @@ function App() {
        * 22: se quita una barra de arriba propia del componente
       */}
       <Stack.Navigator 
-        initialRouteName="Main"
+        initialRouteName="Upload"
         screenOptions={{ headerShown: false }}
       > 
       {/** 

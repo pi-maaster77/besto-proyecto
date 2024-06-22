@@ -1,56 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, Image, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { Button, Image, View, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
-import styles from './Styles';
-const Uploader: React.FC = () => {
-  const [title, setTitle] = useState<string>('');
 
-  useEffect(() => {
-    const requestPermissions = async () => {
+const Uploader: React.FC = () => {
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const pickImage = async () => {
+    // Pedir permisos para acceder a la galería de imágenes
+    if (Platform.OS !== 'web') {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert(
-          'Permission required',
-          'This app needs permission to access your camera roll.',
-          [{ text: 'OK' }]
-        );
+        alert('Lo sentimos, necesitamos permisos de cámara para hacer esto funcionar!');
+        return;
       }
-    };
-
-    requestPermissions();
-  }, []);
-
-  const handleSubmit = () => {
-    if (!title) {
-      console.log('Title or image is missing');
-      return;
     }
 
-    const formData = new FormData();
-    formData.append('title', title);
-    axios.post('http://localhost:5000/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-    .then(response => {
-      console.log('Server response:', response.data);
-    })
-    .catch(error => {
-      console.error('Error uploading image:', error.response?.data || error.message);
+    // Abrir el selector de imágenes
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+
+  const uploadImage = async () => {
+    if (!selectedImage) return;
+
+    // Obtener información del archivo
+    const response = await fetch(selectedImage);
+    const blob = await response.blob();
+
+    const formData = new FormData();
+    formData.append('image', blob, 'photo.jpg');
+
+    try {
+      const response = await axios.post('http://localhost:5000/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('Upload success', response.data);
+      alert('Imagen subida con éxito!');
+    } catch (error) {
+      console.error('Error uploading image', error);
+      alert('Error subiendo la imagen.');
+    }
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Title"
-        value={title}
-        onChangeText={text => setTitle(text)}
-      />
-      <Button title="Upload" onPress={handleSubmit} />
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button title="Seleccionar Imagen" onPress={pickImage} />
+      {selectedImage && (
+        <>
+          <Image source={{ uri: selectedImage }} style={{ width: 200, height: 200 }} />
+          <Button title="Subir Imagen" onPress={uploadImage} />
+        </>
+      )}
     </View>
   );
 };

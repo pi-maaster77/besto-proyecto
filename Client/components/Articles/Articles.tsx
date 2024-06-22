@@ -29,7 +29,7 @@ function Articles() {
     const fetchData = async () => {
       try {
         // Hacemos una solicitud GET a la URL del servidor para obtener los datos
-        const response = await axios.get<DataItem[]>('http://localhost:5000');
+        const response = await axios.get<DataItem[]>('http://localhost:5000/articles');
         setData(response.data); // Actualizamos el estado con los datos obtenidos
         setIsLoading(false); // Cambiamos el estado de carga a falso
       } catch (error) {
