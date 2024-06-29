@@ -2,6 +2,10 @@
 import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#001'
+
+    },
     text: {
         color: '#FFF',
         fontSize: 30

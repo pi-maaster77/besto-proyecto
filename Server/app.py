@@ -25,9 +25,6 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
-@app.route('/')
-def index():
-    return render_template('test.html')
 
 @app.route("/articles")
 def route():

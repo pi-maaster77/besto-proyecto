@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Image, View, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import styles from './Styles';
 import axios from 'axios';
+import NavigationButtons from '../Navegator/navegator';
 
 const Uploader: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -54,7 +56,7 @@ const Uploader: React.FC = () => {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={styles.container}>
       <Button title="Seleccionar Imagen" onPress={pickImage} />
       {selectedImage && (
         <>
@@ -62,8 +64,10 @@ const Uploader: React.FC = () => {
           <Button title="Subir Imagen" onPress={uploadImage} />
         </>
       )}
+    <NavigationButtons />
     </View>
   );
 };
 
 export default Uploader;
+    

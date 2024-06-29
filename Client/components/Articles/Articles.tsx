@@ -1,10 +1,11 @@
 // Importamos los módulos necesarios de React y React Native
 import React from "react";
-import { ScrollView, View, Text, Image, FlatList } from "react-native";
+import { ScrollView, View, Text, FlatList } from "react-native";
 import style from "./Styles"; // Importamos los estilos desde un archivo separado
 import axios from 'axios'; // Importamos axios para hacer solicitudes HTTP
 import { useEffect, useState } from 'react'; // Importamos hooks de React
 import { Article, DataItem } from "../Article/Article"; // Importamos componentes y tipos desde otro archivo
+import NavigationButtons from "../Navegator/navegator";
 
 /* 
 Breve explicación de cómo funciona esto:
@@ -55,17 +56,21 @@ function Articles() {
 
   // Renderizamos la interfaz de usuario
   return (
-    <ScrollView contentContainerStyle={style.article}>
-      {/* Mostramos un mensaje de carga mientras los datos están siendo obtenidos */}
-      {isLoading ? (
-        <Text>Loading...</Text>
-      ) : (
-        // Mapeamos sobre los datos y renderizamos un componente Article para cada artículo
-        data.map((article) => (
-          <Article {...article} key={article.id}/>
-        ))
-      )}
-    </ScrollView>
+    <View style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={style.article}>
+        {/* Mostramos un mensaje de carga mientras los datos están siendo obtenidos */}
+        {isLoading ? (
+          <Text>Loading...</Text>
+        ) : (
+          // Mapeamos sobre los datos y renderizamos un componente Article para cada artículo
+          data.map((article) => (
+            <Article {...article} key={article.id} />
+          ))
+        )}
+      </ScrollView>
+      {/* Colocamos los botones de navegación fuera del ScrollView */}
+      <NavigationButtons />
+    </View>
   );
 };
 

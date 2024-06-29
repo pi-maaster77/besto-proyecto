@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, Button } from "react-native";
 import styles from "./Styles"; // Importamos los estilos desde un archivo separado
 import axios from "axios"; // Importamos axios para hacer solicitudes HTTP
+import NavigationButtons from "../Navegator/navegator";
 
 // Definimos el componente de función Registro
 function Registro() {
@@ -52,7 +53,7 @@ function Registro() {
 
     // Renderizamos la interfaz de usuario
     return (
-        <View>
+        <View style={styles.container}>
             {/* Mostramos el mensaje de error si existe */}
             {myerror ? <Text style={styles.textError}>{myerror}</Text> : null}
             
@@ -87,6 +88,7 @@ function Registro() {
             
             {/* Botón para enviar el formulario */}
             <Button title="Registrarse" onPress={handleUpload}/>
+            <NavigationButtons />
         </View>
     );
 }
