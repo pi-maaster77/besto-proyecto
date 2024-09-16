@@ -25,7 +25,6 @@ app.config['UPLOAD_FOLDER'] = 'uploads'
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
     os.makedirs(app.config['UPLOAD_FOLDER'])
 
-
 @app.route("/articles")
 def route():
     with connection.cursor() as cursor:
@@ -45,7 +44,7 @@ def route():
 def data():
     nombre = request.args.get('nombre')
     try:
-        return send_file(f"images/{nombre}", mimetype='image/png')
+        return send_file(f"uploads/{nombre}", mimetype='image/png')
     except Exception as e:
         print(e)
         return send_file(f"images/404.png", mimetype='image/*')
@@ -61,51 +60,36 @@ def get_likes():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    if 'image' not in request.files:
-        print("No se seleccionó ningún archivo")
-        return "No se seleccionó ningún archivo", 400
+    # Verifica que el archivo de imagen y el título están en la solicitud
+    if 'image' not in request.files or 'title' not in request.form:
+        print("Falta el archivo o el título")
+        return "Falta el archivo o el título", 400
+
+    # Obtenemos el archivo de imagen y el título
     file = request.files['image']
+    title = request.form['title']
 
     if file.filename == '':
         print("No se seleccionó ningún archivo")
         return "No se seleccionó ningún archivo", 400
 
-    if file:
+    if file and title:
+        # Guardamos el archivo en la carpeta de subida
         filename = file.filename
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
         print(f"Archivo subido con éxito: {filename}")
-        return f"Archivo subido con éxito: {filename}", 200
 
-@app.route('/login', methods=['POST'])
-def login():
-    user = request.form.get('user')
-    passwd = request.form.get('passwd')
-    print(f"user: {user}")
-    print(f"passwd: {passwd}")
-
-    with connection.cursor() as cursor:
-        query = "SELECT * FROM users WHERE username = %s AND password = %s"
-        cursor.execute(query, (user, passwd))
-        result = cursor.fetchone()
-        json_result = result
-        return jsonify(json_result)
-
-@app.route('/register', methods=['POST'])
-def register():
-    user = request.form.get('user')
-    passwd = request.form.get('passwd')
-    print(f"user: {user}")
-    print(f"passwd: {passwd}")
-    try:
-        with connection.cursor() as cursor:
-            query = "INSERT INTO users (username, password) VALUES (%s, %s)"
-            cursor.execute(query, (user, passwd))
-            connection.commit()
-            return jsonify({"message": "ok"})
-    except Exception as e:
-        print(e)
-        return jsonify({"error": str(e)})
+        # Guardamos el título y la imagen en la base de datos
+        try:
+            with connection.cursor() as cursor:
+                query = "INSERT INTO articulos (img, title) VALUES (%s, %s)"
+                cursor.execute(query, (filename, title))
+                connection.commit()
+                return jsonify({"message": "Artículo subido con éxito", "title": title, "image": filename}), 200
+        except Exception as e:
+            print(e)
+            return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

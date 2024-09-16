@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Button, Image, View, Platform } from 'react-native';
+import { Button, Image, TextInput, View, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import styles from './Styles';
 import axios from 'axios';
+import styles from './Styles';
 import NavigationButtons from '../Navegator/navegator';
 
 const Uploader: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [title, setTitle] = useState<string>('');
 
   const pickImage = async () => {
     // Pedir permisos para acceder a la galería de imágenes
@@ -32,7 +33,10 @@ const Uploader: React.FC = () => {
   };
 
   const uploadImage = async () => {
-    if (!selectedImage) return;
+    if (!selectedImage || !title) {
+      alert('Por favor, selecciona una imagen y proporciona un título.');
+      return;
+    }
 
     // Obtener información del archivo
     const response = await fetch(selectedImage);
@@ -40,6 +44,7 @@ const Uploader: React.FC = () => {
 
     const formData = new FormData();
     formData.append('image', blob, 'photo.jpg');
+    formData.append('title', title);
 
     try {
       const response = await axios.post('http://localhost:5000/upload', formData, {
@@ -49,6 +54,8 @@ const Uploader: React.FC = () => {
       });
       console.log('Upload success', response.data);
       alert('Imagen subida con éxito!');
+      setSelectedImage(null);
+      setTitle('');
     } catch (error) {
       console.error('Error uploading image', error);
       alert('Error subiendo la imagen.');
@@ -57,6 +64,12 @@ const Uploader: React.FC = () => {
 
   return (
     <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Título del Artículo"
+        value={title}
+        onChangeText={setTitle}
+      />
       <Button title="Seleccionar Imagen" onPress={pickImage} />
       {selectedImage && (
         <>
@@ -64,10 +77,9 @@ const Uploader: React.FC = () => {
           <Button title="Subir Imagen" onPress={uploadImage} />
         </>
       )}
-    <NavigationButtons />
+      <NavigationButtons />
     </View>
   );
 };
 
 export default Uploader;
-    
