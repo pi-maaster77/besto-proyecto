@@ -5,6 +5,16 @@ import styles from "./Styles"; // Importamos los estilos desde un archivo separa
 import axios from "axios"; // Importamos axios para hacer solicitudes HTTP
 import NavigationButtons from "../Navegator/navegator";
 
+async function sha256(message:string) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // String hexadecimal
+    return hashHex;
+}
+
+
 // Definimos el componente de función Registro
 function Registro() {
     // Definimos los estados locales para manejar errores y los valores de los inputs
@@ -12,9 +22,8 @@ function Registro() {
     const [user, setUser] = useState(""); // Estado para almacenar el nombre de usuario
     const [passwd, setPasswd] = useState(""); // Estado para almacenar la contraseña
     const [cpasswd, setCPasswd] = useState(""); // Estado para almacenar la confirmación de la contraseña
-
     // Función que se llama cuando el usuario presiona el botón para registrarse
-    function handleUpload() {
+    async function handleUpload() {
         // Validamos que todos los campos estén llenos
         if (!user || !passwd || !cpasswd) {
             setError("No se ingresó el usuario o la contraseña"); // Establecemos un mensaje de error si falta algún campo
@@ -28,9 +37,10 @@ function Registro() {
         }
 
         // Creamos un objeto FormData para enviar los datos del formulario
+        const hashedPasswd = await sha256(passwd);
         const formData = new FormData();
         formData.append('user', user); // Añadimos el nombre de usuario al FormData
-        formData.append('passwd', passwd); // Añadimos la contraseña al FormData
+        formData.append('passwd', hashedPasswd); // Añadimos la contraseña al FormData
 
         // Hacemos una solicitud POST a la URL del servidor
         axios.post('http://localhost:5000/register', formData, {

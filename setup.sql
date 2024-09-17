@@ -19,6 +19,12 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE likes (
+    bv user_id INT REFERENCES users(id) ON DELETE CASCADE,
+    article_id INT REFERENCES articles(id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, article_id)
+)
+
 -- Crear un nuevo usuario en PostgreSQL (reemplaza 'server' y 'app_password' con los valores deseados)
 CREATE USER server WITH PASSWORD --'contraseña'; -- modificar antes de usar
 

@@ -91,5 +91,51 @@ def upload_file():
             print(e)
             return jsonify({"error": str(e)}), 500
 
+@app.route("/login", methods=['POST'])
+def iniciar_sesion():
+    if not 'user' in request.form or not 'passwd' in request.form:
+        return "Falta el usuario o la contraseña", 400
+    
+    username = request.form['user']
+    passwd = request.form['passwd']  # Contraseña hasheada desde el cliente
+
+    try:
+        with connection.cursor() as cursor:
+            # Usamos una consulta parametrizada
+            sql = "SELECT username FROM users WHERE username=%s AND password=%s"
+            cursor.execute(sql, (username, passwd))  # Comparación con contraseña hasheada
+
+            result = cursor.fetchone()
+            if result:
+                return jsonify({"message": "Inicio de sesión exitoso"})
+            else:
+                return jsonify({"message": "Usuario o contraseña incorrectos"}), 401
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route("/register", methods=['POST'])
+def registro():
+    if not 'user' in request.form or not 'passwd' in request.form:
+        return "Falta el usuario o la contraseña", 400
+    
+    username = request.form['user']
+    passwd = str(request.form['passwd'])  # Contraseña hasheada desde el cliente
+    print(username, passwd)
+    try:
+        with connection.cursor() as cursor:
+            # Usamos una consulta parametrizada
+            sql = "SELECT username FROM users WHERE username=%s"
+            cursor.execute(sql, (username,))  # Comparación con contraseña hasheada
+            result = cursor.fetchone()
+            if result:
+                return jsonify({"message": "El Usuario ya existe"}), 401
+            else:
+                sql = "INSERT INTO users (username, password) VALUES (%s, %s)"
+                cursor.execute(sql, (username, passwd))  # Insertar el nuevo usuario
+                connection.commit()  # No olvides hacer commit para que se guarden los cambios
+                return jsonify({"message": "Registro exitoso"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
