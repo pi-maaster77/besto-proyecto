@@ -1,1 +1,1 @@
-DATABASE_URL=postgres://server:<contraseña>@localHost/<base de datos>
+DATABASE_URL=postgres://server:123456@localHost/besto_proyecto
